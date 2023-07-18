@@ -2,15 +2,15 @@ from __future__ import print_function
 
 import unittest
 
-import wrapt
-import wrapt.wrappers
+import matrix_wrapt
+import matrix_wrapt.wrappers
 
 from compat import PY2, PY3, exec_
 
 class TestClassInheritence(unittest.TestCase):
 
     def test_function_type_inheritence(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -18,11 +18,11 @@ class TestClassInheritence(unittest.TestCase):
         def _function(*args, **kwargs):
             return args, kwargs
 
-        self.assertTrue(isinstance(_function, wrapt.FunctionWrapper))
-        self.assertTrue(isinstance(_function, wrapt.ObjectProxy))
+        self.assertTrue(isinstance(_function, matrix_wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(_function, matrix_wrapt.ObjectProxy))
 
     def test_instancemethod_type_inheritence(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -31,16 +31,16 @@ class TestClassInheritence(unittest.TestCase):
             def function(self, args, **kwargs):
                 return args, kwargs
 
-            self.assertTrue(isinstance(function, wrapt.FunctionWrapper))
-            self.assertTrue(isinstance(function, wrapt.ObjectProxy))
+            self.assertTrue(isinstance(function, matrix_wrapt.FunctionWrapper))
+            self.assertTrue(isinstance(function, matrix_wrapt.ObjectProxy))
 
         instance = Class()
 
-        self.assertFalse(isinstance(instance.function, wrapt.FunctionWrapper))
-        self.assertTrue(isinstance(instance.function, wrapt.ObjectProxy))
+        self.assertFalse(isinstance(instance.function, matrix_wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(instance.function, matrix_wrapt.ObjectProxy))
 
     def test_classmethod_type_inheritence(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -50,16 +50,16 @@ class TestClassInheritence(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-            self.assertTrue(isinstance(function, wrapt.FunctionWrapper))
-            self.assertTrue(isinstance(function, wrapt.ObjectProxy))
+            self.assertTrue(isinstance(function, matrix_wrapt.FunctionWrapper))
+            self.assertTrue(isinstance(function, matrix_wrapt.ObjectProxy))
 
         instance = Class()
 
-        self.assertFalse(isinstance(instance.function, wrapt.FunctionWrapper))
-        self.assertTrue(isinstance(instance.function, wrapt.ObjectProxy))
+        self.assertFalse(isinstance(instance.function, matrix_wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(instance.function, matrix_wrapt.ObjectProxy))
 
     def test_staticmethod_type_inheritence(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -69,20 +69,20 @@ class TestClassInheritence(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-            self.assertTrue(isinstance(function, wrapt.FunctionWrapper))
-            self.assertTrue(isinstance(function, wrapt.ObjectProxy))
+            self.assertTrue(isinstance(function, matrix_wrapt.FunctionWrapper))
+            self.assertTrue(isinstance(function, matrix_wrapt.ObjectProxy))
 
         instance = Class()
 
-        self.assertFalse(isinstance(instance.function, wrapt.FunctionWrapper))
-        self.assertTrue(isinstance(instance.function, wrapt.ObjectProxy))
+        self.assertFalse(isinstance(instance.function, matrix_wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(instance.function, matrix_wrapt.ObjectProxy))
 
 class TestAttributeAccess(unittest.TestCase):
 
     def test_function_attributes(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         def function1(*args, **kwargs):
             return args, kwargs
@@ -95,7 +95,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_instancemethod_attributes(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             def function1(self, *args, **kwargs):
@@ -115,7 +115,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_classmethod_attributes(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             @classmethod
@@ -136,7 +136,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_staticmethod_attributes(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             @staticmethod
@@ -151,7 +151,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_instancemethod_attributes_external_class(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             def function1(self, *args, **kwargs):
@@ -170,7 +170,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_classmethod_attributes_external_class(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             @classmethod
@@ -185,7 +185,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_staticmethod_attributes_external_class(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             @staticmethod
@@ -204,7 +204,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_instancemethod_attributes_external_instance(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             def function1(self, *args, **kwargs):
@@ -224,7 +224,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_classmethod_attributes_external_instance(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             @classmethod
@@ -239,7 +239,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_staticmethod_attributes_external_instance(self):
         def decorator1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
-        decorator2 = wrapt.decorator(decorator1)
+        decorator2 = matrix_wrapt.decorator(decorator1)
 
         class Class(object):
             @staticmethod
@@ -258,7 +258,7 @@ class TestAttributeAccess(unittest.TestCase):
 class TestParentReference(unittest.TestCase):
 
     def test_function_decorator(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -269,7 +269,7 @@ class TestParentReference(unittest.TestCase):
         self.assertEqual(function._self_parent, None)
 
     def test_class_decorator(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -280,7 +280,7 @@ class TestParentReference(unittest.TestCase):
         self.assertEqual(Class._self_parent, None)
 
     def test_nested_class_decorator(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -292,7 +292,7 @@ class TestParentReference(unittest.TestCase):
         self.assertEqual(Class.Nested._self_parent, None)
 
     def test_instancemethod(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -307,7 +307,7 @@ class TestParentReference(unittest.TestCase):
         self.assertNotEqual(Class.function_im._self_parent, None)
 
     def test_classmethod(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -320,7 +320,7 @@ class TestParentReference(unittest.TestCase):
         self.assertNotEqual(Class.function_cm._self_parent, None)
 
     def test_staticmethod_inner(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -335,7 +335,7 @@ class TestParentReference(unittest.TestCase):
 class TestGuardArgument(unittest.TestCase):
 
     def test_boolean_false_guard_on_decorator(self):
-        @wrapt.decorator(enabled=False)
+        @matrix_wrapt.decorator(enabled=False)
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -343,10 +343,10 @@ class TestGuardArgument(unittest.TestCase):
         def function():
             pass
 
-        self.assertFalse(isinstance(function, wrapt.FunctionWrapper))
+        self.assertFalse(isinstance(function, matrix_wrapt.FunctionWrapper))
 
     def test_boolean_true_guard_on_decorator(self):
-        @wrapt.decorator(enabled=True)
+        @matrix_wrapt.decorator(enabled=True)
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -354,7 +354,7 @@ class TestGuardArgument(unittest.TestCase):
         def function():
             pass
 
-        self.assertTrue(isinstance(function, wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(function, matrix_wrapt.FunctionWrapper))
 
     def test_boolean_dynamic_guard_on_decorator(self):
         class Guard(object):
@@ -367,7 +367,7 @@ class TestGuardArgument(unittest.TestCase):
 
         result = []
 
-        @wrapt.decorator(enabled=guard)
+        @matrix_wrapt.decorator(enabled=guard)
         def _decorator(wrapped, instance, args, kwargs):
             result.append(1)
             return wrapped(*args, **kwargs)
@@ -376,7 +376,7 @@ class TestGuardArgument(unittest.TestCase):
         def function():
             pass
 
-        self.assertTrue(isinstance(function, wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(function, matrix_wrapt.FunctionWrapper))
 
         function()
 
@@ -396,7 +396,7 @@ class TestGuardArgument(unittest.TestCase):
 
         result = []
 
-        @wrapt.decorator(enabled=guard)
+        @matrix_wrapt.decorator(enabled=guard)
         def _decorator(wrapped, instance, args, kwargs):
             result.append(1)
             return wrapped(*args, **kwargs)
@@ -405,7 +405,7 @@ class TestGuardArgument(unittest.TestCase):
         def function():
             pass
 
-        self.assertTrue(isinstance(function, wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(function, matrix_wrapt.FunctionWrapper))
 
         function()
 
@@ -425,7 +425,7 @@ class TestGuardArgument(unittest.TestCase):
 
         result = []
 
-        @wrapt.decorator(enabled=guard)
+        @matrix_wrapt.decorator(enabled=guard)
         def _decorator(wrapped, instance, args, kwargs):
             result.append(1)
             return wrapped(*args, **kwargs)
@@ -437,7 +437,7 @@ class TestGuardArgument(unittest.TestCase):
 
         c = Class()
 
-        self.assertTrue(isinstance(c.function, wrapt.BoundFunctionWrapper))
+        self.assertTrue(isinstance(c.function, matrix_wrapt.BoundFunctionWrapper))
 
         c.function()
 
@@ -446,7 +446,7 @@ class TestGuardArgument(unittest.TestCase):
         result = []
         value = False
 
-        self.assertTrue(isinstance(c.function, wrapt.BoundFunctionWrapper))
+        self.assertTrue(isinstance(c.function, matrix_wrapt.BoundFunctionWrapper))
 
         c.function()
 
@@ -456,10 +456,10 @@ class TestDerivedFunctionWrapper(unittest.TestCase):
 
     def test_override_bound_type(self):
 
-        class _BoundFunctionWrapper(wrapt.BoundFunctionWrapper):
+        class _BoundFunctionWrapper(matrix_wrapt.BoundFunctionWrapper):
             ATTRIBUTE = 1
 
-        class _FunctionWrapper(wrapt.FunctionWrapper):
+        class _FunctionWrapper(matrix_wrapt.FunctionWrapper):
             __bound_function_wrapper__ = _BoundFunctionWrapper
 
         def function():
@@ -489,9 +489,9 @@ class TestFunctionBinding(unittest.TestCase):
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
-        _wrapper = wrapt.FunctionWrapper(function, wrapper)
+        _wrapper = matrix_wrapt.FunctionWrapper(function, wrapper)
 
-        self.assertTrue(isinstance(_wrapper, wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(_wrapper, matrix_wrapt.FunctionWrapper))
 
         instance = object()
 
@@ -500,7 +500,7 @@ class TestFunctionBinding(unittest.TestCase):
         self.assertTrue(_bound_wrapper_1._self_parent is _wrapper)
 
         self.assertTrue(isinstance(_bound_wrapper_1,
-                wrapt.BoundFunctionWrapper))
+                                   matrix_wrapt.BoundFunctionWrapper))
         self.assertEqual(_bound_wrapper_1._self_instance, instance)
 
         _bound_wrapper_2 = _bound_wrapper_1.__get__(instance, type(instance))
@@ -508,7 +508,7 @@ class TestFunctionBinding(unittest.TestCase):
         self.assertTrue(_bound_wrapper_2._self_parent is _wrapper)
 
         self.assertTrue(isinstance(_bound_wrapper_2,
-                wrapt.BoundFunctionWrapper))
+                                   matrix_wrapt.BoundFunctionWrapper))
         self.assertEqual(_bound_wrapper_2._self_instance,
                 _bound_wrapper_1._self_instance)
 
@@ -522,9 +522,9 @@ class TestFunctionBinding(unittest.TestCase):
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
-        _wrapper = wrapt.FunctionWrapper(function, wrapper)
+        _wrapper = matrix_wrapt.FunctionWrapper(function, wrapper)
 
-        self.assertTrue(isinstance(_wrapper, wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(_wrapper, matrix_wrapt.FunctionWrapper))
 
         instance = object()
 
@@ -533,7 +533,7 @@ class TestFunctionBinding(unittest.TestCase):
         self.assertTrue(_bound_wrapper_1._self_parent is _wrapper)
 
         self.assertTrue(isinstance(_bound_wrapper_1,
-                wrapt.BoundFunctionWrapper))
+                                   matrix_wrapt.BoundFunctionWrapper))
         self.assertEqual(_bound_wrapper_1._self_instance, None)
 
         _bound_wrapper_2 = _bound_wrapper_1.__get__(instance, type(instance))
@@ -541,7 +541,7 @@ class TestFunctionBinding(unittest.TestCase):
         self.assertTrue(_bound_wrapper_2._self_parent is _wrapper)
 
         self.assertTrue(isinstance(_bound_wrapper_2,
-                wrapt.BoundFunctionWrapper))
+                                   matrix_wrapt.BoundFunctionWrapper))
         self.assertEqual(_bound_wrapper_2._self_instance, instance)
 
         self.assertTrue(_bound_wrapper_1 is not _bound_wrapper_2)
@@ -553,7 +553,7 @@ class TestInvalidWrapper(unittest.TestCase):
         def run(*args):
             def _wrapper(wrapped, instance, args, kwargs):
                 return wrapped(*args, **kwargs)
-            wrapper = wrapt.FunctionWrapper(None, _wrapper)
+            wrapper = matrix_wrapt.FunctionWrapper(None, _wrapper)
             wrapper.__get__(list(), list)()
 
         self.assertRaises(AttributeError, run, ())
@@ -561,7 +561,7 @@ class TestInvalidWrapper(unittest.TestCase):
 class TestInvalidCalling(unittest.TestCase):
 
     def test_missing_self_via_class(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 

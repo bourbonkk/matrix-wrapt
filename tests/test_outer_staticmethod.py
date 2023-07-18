@@ -3,7 +3,7 @@ from __future__ import print_function
 import unittest
 import types
 
-import wrapt
+import matrix_wrapt
 
 from compat import exec_, getfullargspec
 
@@ -128,7 +128,7 @@ class TestCallingOuterStaticMethod(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertEqual(instance, None)
             self.assertEqual(args, _args)
@@ -159,7 +159,7 @@ class TestCallingOuterStaticMethod(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertEqual(instance, None)
             self.assertEqual(args, _args)

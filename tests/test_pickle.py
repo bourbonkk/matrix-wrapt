@@ -4,9 +4,9 @@ import unittest
 
 import pickle
 
-import wrapt
+import matrix_wrapt
 
-class CustomObjectProxy(wrapt.ObjectProxy):
+class CustomObjectProxy(matrix_wrapt.ObjectProxy):
 
     def __reduce_ex__(self, proto):
         return (list, (self.__wrapped__,))
@@ -14,7 +14,7 @@ class CustomObjectProxy(wrapt.ObjectProxy):
 class TestObjectPickle(unittest.TestCase):
 
     def test_pickle(self):
-        proxy = wrapt.ObjectProxy([1])
+        proxy = matrix_wrapt.ObjectProxy([1])
 
         with self.assertRaises(NotImplementedError) as context:
             data = pickle.dumps(proxy)

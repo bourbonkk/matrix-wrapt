@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import unittest
 
-import wrapt
+import matrix_wrapt
 
 class TestDecorator(unittest.TestCase):
 
@@ -10,7 +10,7 @@ class TestDecorator(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -29,7 +29,7 @@ class TestDecorator(unittest.TestCase):
         class Instance(object):
             def __init__(self):
                 self.count = 0
-            @wrapt.decorator
+            @matrix_wrapt.decorator
             def decorator(self, wrapped, instance, args, kwargs):
                 self.count += 1
                 return wrapped(*args, **kwargs)
@@ -56,7 +56,7 @@ class TestDecorator(unittest.TestCase):
 
         class Instance(object):
             count = 0
-            @wrapt.decorator
+            @matrix_wrapt.decorator
             @classmethod
             def decorator(cls, wrapped, instance, args, kwargs):
                 cls.count += 1
@@ -80,7 +80,7 @@ class TestDecorator(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         class ClassDecorator(object):
             def __call__(self, wrapped, instance, args, kwargs):
                 return wrapped(*args, **kwargs)
@@ -97,7 +97,7 @@ class TestDecorator(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         class ClassDecorator(object):
             def __init__(self, arg):
                 assert arg == 1

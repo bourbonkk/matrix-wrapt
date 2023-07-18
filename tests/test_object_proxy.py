@@ -7,7 +7,7 @@ import re
 
 is_pypy = '__pypy__' in sys.builtin_module_names
 
-import wrapt
+import matrix_wrapt
 
 from compat import PY2, PY3, exec_
 
@@ -29,8 +29,8 @@ exec_(OBJECTS_CODE, objects.__dict__, objects.__dict__)
 class TestAttributeAccess(unittest.TestCase):
 
     def test_init_not_called(self):
-        a = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        b = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        a = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        b = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             a.__wrapped__
@@ -45,25 +45,25 @@ class TestAttributeAccess(unittest.TestCase):
     def test_attributes(self):
         def function1(*args, **kwargs):
             return args, kwargs
-        function2 = wrapt.ObjectProxy(function1)
+        function2 = matrix_wrapt.ObjectProxy(function1)
 
         self.assertEqual(function2.__wrapped__, function1)
 
     def test_get_wrapped(self):
         def function1(*args, **kwargs):
             return args, kwargs
-        function2 = wrapt.ObjectProxy(function1)
+        function2 = matrix_wrapt.ObjectProxy(function1)
 
         self.assertEqual(function2.__wrapped__, function1)
 
-        function3 = wrapt.ObjectProxy(function2)
+        function3 = matrix_wrapt.ObjectProxy(function2)
 
         self.assertEqual(function3.__wrapped__, function1)
 
     def test_set_wrapped(self):
         def function1(*args, **kwargs):
             return args, kwargs
-        function2 = wrapt.ObjectProxy(function1)
+        function2 = matrix_wrapt.ObjectProxy(function1)
 
         self.assertEqual(function2, function1)
         self.assertEqual(function2.__wrapped__, function1)
@@ -98,7 +98,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_delete_wrapped(self):
         def function1(*args, **kwargs):
             return args, kwargs
-        function2 = wrapt.ObjectProxy(function1)
+        function2 = matrix_wrapt.ObjectProxy(function1)
 
         def run(*args):
             del function2.__wrapped__
@@ -108,7 +108,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_proxy_attribute(self):
         def function1(*args, **kwargs):
             return args, kwargs
-        function2 = wrapt.ObjectProxy(function1)
+        function2 = matrix_wrapt.ObjectProxy(function1)
 
         function2._self_variable = True
 
@@ -127,7 +127,7 @@ class TestAttributeAccess(unittest.TestCase):
     def test_wrapped_attribute(self):
         def function1(*args, **kwargs):
             return args, kwargs
-        function2 = wrapt.ObjectProxy(function1)
+        function2 = matrix_wrapt.ObjectProxy(function1)
 
         function2.variable = True
 
@@ -149,7 +149,7 @@ class TestAttributeAccess(unittest.TestCase):
             def value(self):
                 return "value"
 
-        class WrappedObject(wrapt.ObjectProxy):
+        class WrappedObject(matrix_wrapt.ObjectProxy):
             @property
             def value(self):
                 return 2 * self.__wrapped__.value
@@ -162,7 +162,7 @@ class TestAttributeAccess(unittest.TestCase):
             def value(self):
                 return "value"
 
-        class WrappedObject(wrapt.ObjectProxy):
+        class WrappedObject(matrix_wrapt.ObjectProxy):
             @property
             def value(self):
                 raise ValueError("value-error")
@@ -182,7 +182,7 @@ class TestAttributeAccess(unittest.TestCase):
             def value(self):
                 return "value"
 
-        class WrappedObject(wrapt.ObjectProxy):
+        class WrappedObject(matrix_wrapt.ObjectProxy):
             @property
             def value(self):
                 raise AttributeError("attribute-error")
@@ -201,7 +201,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of class __name__ attribute.
 
         target = objects.Target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__name__, target.__name__)
 
@@ -209,7 +209,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of class __qualname__ attribute.
 
         target = objects.Target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         try:
             __qualname__ = target.__qualname__
@@ -222,7 +222,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of class __module__ attribute.
 
         target = objects.Target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__module__, target.__module__)
 
@@ -230,7 +230,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of class __doc__ attribute.
 
         target = objects.Target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__doc__, target.__doc__)
 
@@ -238,7 +238,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of instance __module__ attribute.
 
         target = objects.Target()
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__module__, target.__module__)
 
@@ -246,7 +246,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of instance __doc__ attribute.
 
         target = objects.Target()
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__doc__, target.__doc__)
 
@@ -254,7 +254,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of function __name__ attribute.
 
         target = objects.target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__name__, target.__name__)
 
@@ -262,7 +262,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of function __qualname__ attribute.
 
         target = objects.target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         try:
             __qualname__ = target.__qualname__
@@ -275,7 +275,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of function __module__ attribute.
 
         target = objects.target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__module__, target.__module__)
 
@@ -283,7 +283,7 @@ class TestNamingObjectProxy(unittest.TestCase):
         # Test preservation of function __doc__ attribute.
 
         target = objects.target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__doc__, target.__doc__)
 
@@ -293,7 +293,7 @@ class TestTypeObjectProxy(unittest.TestCase):
         # Test preservation of class __class__ attribute.
 
         target = objects.Target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__class__, target.__class__)
 
@@ -303,7 +303,7 @@ class TestTypeObjectProxy(unittest.TestCase):
         # Test preservation of instance __class__ attribute.
 
         target = objects.Target()
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__class__, target.__class__)
 
@@ -314,7 +314,7 @@ class TestTypeObjectProxy(unittest.TestCase):
         # Test preservation of function __class__ attribute.
 
         target = objects.target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(wrapper.__class__, target.__class__)
 
@@ -326,7 +326,7 @@ class TestDirObjectProxy(unittest.TestCase):
         # Test preservation of class __dir__ attribute.
 
         target = objects.Target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(dir(wrapper), dir(target))
 
@@ -334,7 +334,7 @@ class TestDirObjectProxy(unittest.TestCase):
         # Test preservation of class __dir__ attribute.
 
         target = objects.Target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(vars(wrapper), vars(target))
 
@@ -342,7 +342,7 @@ class TestDirObjectProxy(unittest.TestCase):
         # Test preservation of instance __dir__ attribute.
 
         target = objects.Target()
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(dir(wrapper), dir(target))
 
@@ -350,7 +350,7 @@ class TestDirObjectProxy(unittest.TestCase):
         # Test preservation of instance __dir__ attribute.
 
         target = objects.Target()
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(vars(wrapper), vars(target))
 
@@ -358,7 +358,7 @@ class TestDirObjectProxy(unittest.TestCase):
         # Test preservation of function __dir__ attribute.
 
         target = objects.target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(dir(wrapper), dir(target))
 
@@ -366,7 +366,7 @@ class TestDirObjectProxy(unittest.TestCase):
         # Test preservation of function __dir__ attribute.
 
         target = objects.target
-        wrapper = wrapt.ObjectProxy(target)
+        wrapper = matrix_wrapt.ObjectProxy(target)
 
         self.assertEqual(vars(wrapper), vars(target))
 
@@ -379,7 +379,7 @@ class TestCallingObject(unittest.TestCase):
         def function(*args, **kwargs):
             return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(function)
+        wrapper = matrix_wrapt.CallableObjectProxy(function)
 
         result = wrapper()
 
@@ -392,7 +392,7 @@ class TestCallingObject(unittest.TestCase):
         def function(*args, **kwargs):
             return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(function)
+        wrapper = matrix_wrapt.CallableObjectProxy(function)
 
         result = wrapper(*_args)
 
@@ -405,7 +405,7 @@ class TestCallingObject(unittest.TestCase):
         def function(*args, **kwargs):
             return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(function)
+        wrapper = matrix_wrapt.CallableObjectProxy(function)
 
         result = wrapper(**_kwargs)
 
@@ -418,7 +418,7 @@ class TestCallingObject(unittest.TestCase):
         def function(*args, **kwargs):
             return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(function)
+        wrapper = matrix_wrapt.CallableObjectProxy(function)
 
         result = wrapper(*_args, **_kwargs)
 
@@ -432,7 +432,7 @@ class TestCallingObject(unittest.TestCase):
             def function(self, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper()
 
@@ -446,7 +446,7 @@ class TestCallingObject(unittest.TestCase):
             def function(self, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(*_args)
 
@@ -460,7 +460,7 @@ class TestCallingObject(unittest.TestCase):
             def function(self, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(**_kwargs)
 
@@ -474,7 +474,7 @@ class TestCallingObject(unittest.TestCase):
             def function(self, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(*_args, **_kwargs)
 
@@ -488,7 +488,7 @@ class TestCallingObject(unittest.TestCase):
             def function(self, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(Class())
 
@@ -502,7 +502,7 @@ class TestCallingObject(unittest.TestCase):
             def function(self, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(Class(), *_args)
 
@@ -516,7 +516,7 @@ class TestCallingObject(unittest.TestCase):
             def function(self, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(Class(), **_kwargs)
 
@@ -530,7 +530,7 @@ class TestCallingObject(unittest.TestCase):
             def function(self, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(Class(), *_args, **_kwargs)
 
@@ -545,7 +545,7 @@ class TestCallingObject(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper()
 
@@ -560,7 +560,7 @@ class TestCallingObject(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(*_args)
 
@@ -575,7 +575,7 @@ class TestCallingObject(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(**_kwargs)
 
@@ -590,7 +590,7 @@ class TestCallingObject(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(*_args, **_kwargs)
 
@@ -605,7 +605,7 @@ class TestCallingObject(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper()
 
@@ -620,7 +620,7 @@ class TestCallingObject(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(*_args)
 
@@ -635,7 +635,7 @@ class TestCallingObject(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(**_kwargs)
 
@@ -650,7 +650,7 @@ class TestCallingObject(unittest.TestCase):
             def function(cls, *args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(*_args, **_kwargs)
 
@@ -665,7 +665,7 @@ class TestCallingObject(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper()
 
@@ -680,7 +680,7 @@ class TestCallingObject(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(*_args)
 
@@ -695,7 +695,7 @@ class TestCallingObject(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(**_kwargs)
 
@@ -710,7 +710,7 @@ class TestCallingObject(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class().function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class().function)
 
         result = wrapper(*_args, **_kwargs)
 
@@ -725,7 +725,7 @@ class TestCallingObject(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper()
 
@@ -740,7 +740,7 @@ class TestCallingObject(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(*_args)
 
@@ -755,7 +755,7 @@ class TestCallingObject(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(**_kwargs)
 
@@ -770,7 +770,7 @@ class TestCallingObject(unittest.TestCase):
             def function(*args, **kwargs):
                 return args, kwargs
 
-        wrapper = wrapt.CallableObjectProxy(Class.function)
+        wrapper = matrix_wrapt.CallableObjectProxy(Class.function)
 
         result = wrapper(*_args, **_kwargs)
 
@@ -781,7 +781,7 @@ class TestIterObjectProxy(unittest.TestCase):
     def test_iteration(self):
         items = [1, 2]
 
-        wrapper = wrapt.ObjectProxy(items)
+        wrapper = matrix_wrapt.ObjectProxy(items)
 
         result = [x for x in wrapper]
 
@@ -798,7 +798,7 @@ class TestContextManagerObjectProxy(unittest.TestCase):
 
         instance = Class()
 
-        wrapper = wrapt.ObjectProxy(instance)
+        wrapper = matrix_wrapt.ObjectProxy(instance)
 
         with wrapper:
             pass
@@ -808,14 +808,14 @@ class TestEqualityObjectProxy(unittest.TestCase):
     def test_object_hash(self):
         def function1(*args, **kwargs):
             return args, kwargs
-        function2 = wrapt.ObjectProxy(function1)
+        function2 = matrix_wrapt.ObjectProxy(function1)
 
         self.assertEqual(hash(function2), hash(function1))
 
     def test_mapping_key(self):
         def function1(*args, **kwargs):
             return args, kwargs
-        function2 = wrapt.ObjectProxy(function1)
+        function2 = matrix_wrapt.ObjectProxy(function1)
 
         table = dict()
         table[function1] = True
@@ -828,9 +828,9 @@ class TestEqualityObjectProxy(unittest.TestCase):
         self.assertTrue(table.get(function1))
 
     def test_comparison(self):
-        one = wrapt.ObjectProxy(1)
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        one = matrix_wrapt.ObjectProxy(1)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertTrue(two > 1)
         self.assertTrue(two >= 1)
@@ -859,8 +859,8 @@ class TestEqualityObjectProxy(unittest.TestCase):
 class TestAsNumberObjectProxy(unittest.TestCase):
 
     def test_nonzero(self):
-        true = wrapt.ObjectProxy(True)
-        false = wrapt.ObjectProxy(False)
+        true = matrix_wrapt.ObjectProxy(True)
+        false = matrix_wrapt.ObjectProxy(False)
 
         self.assertTrue(true)
         self.assertFalse(false)
@@ -872,7 +872,7 @@ class TestAsNumberObjectProxy(unittest.TestCase):
         self.assertFalse(not true)
 
     def test_int(self):
-        one = wrapt.ObjectProxy(1)
+        one = matrix_wrapt.ObjectProxy(1)
 
         self.assertEqual(int(one), 1)
 
@@ -880,13 +880,13 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             self.assertEqual(long(one), 1)
 
     def test_float(self):
-        one = wrapt.ObjectProxy(1)
+        one = matrix_wrapt.ObjectProxy(1)
 
         self.assertEqual(float(one), 1.0)
 
     def test_add(self):
-        one = wrapt.ObjectProxy(1)
-        two = wrapt.ObjectProxy(2)
+        one = matrix_wrapt.ObjectProxy(1)
+        two = matrix_wrapt.ObjectProxy(2)
 
         self.assertEqual(one+two, 1+2)
         self.assertEqual(1+two, 1+2)
@@ -895,16 +895,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_add_uninitialized_args(self):
         result = object()
 
-        one = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        two = wrapt.ObjectProxy(2)
+        one = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
 
         try:
             assert one + two == result
         except ValueError:
             pass
 
-        one = wrapt.ObjectProxy(1)
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        one = matrix_wrapt.ObjectProxy(1)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert one + two == result
@@ -912,8 +912,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_sub(self):
-        one = wrapt.ObjectProxy(1)
-        two = wrapt.ObjectProxy(2)
+        one = matrix_wrapt.ObjectProxy(1)
+        two = matrix_wrapt.ObjectProxy(2)
 
         self.assertEqual(one-two, 1-2)
         self.assertEqual(1-two, 1-2)
@@ -922,16 +922,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_sub_uninitialized_args(self):
         result = object()
 
-        one = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        two = wrapt.ObjectProxy(2)
+        one = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
 
         try:
             assert one - two == result
         except ValueError:
             pass
 
-        one = wrapt.ObjectProxy(1)
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        one = matrix_wrapt.ObjectProxy(1)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert one - two == result
@@ -939,8 +939,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_mul(self):
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(two*three, 2*3)
         self.assertEqual(2*three, 2*3)
@@ -949,16 +949,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_mul_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert two * three == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert two * three == result
@@ -969,8 +969,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
         # On Python 2 this will pick up div and on Python
         # 3 it will pick up truediv.
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(two/three, 2/3)
         self.assertEqual(2/three, 2/3)
@@ -979,16 +979,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_div_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert two / three == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert two / three == result
@@ -996,8 +996,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_floordiv(self):
-        two = wrapt.ObjectProxy(2)
-        four = wrapt.ObjectProxy(4)
+        two = matrix_wrapt.ObjectProxy(2)
+        four = matrix_wrapt.ObjectProxy(4)
 
         self.assertEqual(four//two, 4//2)
         self.assertEqual(4//two, 4//2)
@@ -1006,16 +1006,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_floordiv_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        four = wrapt.ObjectProxy(4)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        four = matrix_wrapt.ObjectProxy(4)
 
         try:
             assert two // four == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        four = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        four = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert two // four == result
@@ -1023,8 +1023,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_mod(self):
-        two = wrapt.ObjectProxy(2)
-        four = wrapt.ObjectProxy(4)
+        two = matrix_wrapt.ObjectProxy(2)
+        four = matrix_wrapt.ObjectProxy(4)
 
         self.assertEqual(four % two, 4 % 2)
         self.assertEqual(4 % two, 4 % 2)
@@ -1033,16 +1033,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_mod_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        four = wrapt.ObjectProxy(4)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        four = matrix_wrapt.ObjectProxy(4)
 
         try:
             assert two % four == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        four = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        four = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert two % four == result
@@ -1050,8 +1050,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_divmod(self):
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(divmod(three, two), divmod(3, 2))
         self.assertEqual(divmod(3, two), divmod(3, 2))
@@ -1060,16 +1060,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_divmod_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert divmod(two, three) == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert divmod(two, three) == result
@@ -1077,8 +1077,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_pow(self):
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(three**two, pow(3, 2))
         self.assertEqual(3**two, pow(3, 2))
@@ -1102,16 +1102,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_pow_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert three**two == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert three**two == result
@@ -1119,8 +1119,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_lshift(self):
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(three << two, 3 << 2)
         self.assertEqual(3 << two, 3 << 2)
@@ -1129,16 +1129,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_lshift_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert three << two == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert three << two == result
@@ -1146,8 +1146,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_rshift(self):
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(three >> two, 3 >> 2)
         self.assertEqual(3 >> two, 3 >> 2)
@@ -1156,16 +1156,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_rshift_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert three >> two == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert three >> two == result
@@ -1173,8 +1173,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_and(self):
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(three & two, 3 & 2)
         self.assertEqual(3 & two, 3 & 2)
@@ -1183,16 +1183,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_and_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert three & two == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert three & two == result
@@ -1200,8 +1200,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_xor(self):
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(three ^ two, 3 ^ 2)
         self.assertEqual(3 ^ two, 3 ^ 2)
@@ -1210,16 +1210,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_xor_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert three ^ two == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert three ^ two == result
@@ -1227,8 +1227,8 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_or(self):
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy(3)
 
         self.assertEqual(three | two, 3 | 2)
         self.assertEqual(3 | two, 3 | 2)
@@ -1237,16 +1237,16 @@ class TestAsNumberObjectProxy(unittest.TestCase):
     def test_or_uninitialized_args(self):
         result = object()
 
-        two = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
-        three = wrapt.ObjectProxy(3)
+        two = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
+        three = matrix_wrapt.ObjectProxy(3)
 
         try:
             assert three | two == result
         except ValueError:
             pass
 
-        two = wrapt.ObjectProxy(2)
-        three = wrapt.ObjectProxy.__new__(wrapt.ObjectProxy)
+        two = matrix_wrapt.ObjectProxy(2)
+        three = matrix_wrapt.ObjectProxy.__new__(matrix_wrapt.ObjectProxy)
 
         try:
             assert three | two == result
@@ -1254,178 +1254,178 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_iadd(self):
-        value = wrapt.ObjectProxy(1)
-        one = wrapt.ObjectProxy(1)
+        value = matrix_wrapt.ObjectProxy(1)
+        one = matrix_wrapt.ObjectProxy(1)
 
         value += 1
         self.assertEqual(value, 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value += one
         self.assertEqual(value, 3)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_isub(self):
-        value = wrapt.ObjectProxy(1)
-        one = wrapt.ObjectProxy(1)
+        value = matrix_wrapt.ObjectProxy(1)
+        one = matrix_wrapt.ObjectProxy(1)
 
         value -= 1
         self.assertEqual(value, 0)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value -= one
         self.assertEqual(value, -1)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_imul(self):
-        value = wrapt.ObjectProxy(2)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(2)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value *= 2
         self.assertEqual(value, 4)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value *= two
         self.assertEqual(value, 8)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_idiv(self):
         # On Python 2 this will pick up div and on Python
         # 3 it will pick up truediv.
 
-        value = wrapt.ObjectProxy(2)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(2)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value /= 2
         self.assertEqual(value, 2/2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value /= two
         self.assertEqual(value, 2/2/2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_ifloordiv(self):
-        value = wrapt.ObjectProxy(2)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(2)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value //= 2
         self.assertEqual(value, 2//2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value //= two
         self.assertEqual(value, 2//2//2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_imod(self):
-        value = wrapt.ObjectProxy(10)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(10)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value %= 2
         self.assertEqual(value, 10 % 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value %= two
         self.assertEqual(value, 10 % 2 % 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_ipow(self):
-        value = wrapt.ObjectProxy(10)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(10)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value **= 2
         self.assertEqual(value, 10**2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value **= two
         self.assertEqual(value, 10**2**2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_ilshift(self):
-        value = wrapt.ObjectProxy(256)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(256)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value <<= 2
         self.assertEqual(value, 256 << 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value <<= two
         self.assertEqual(value, 256 << 2 << 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_irshift(self):
-        value = wrapt.ObjectProxy(2)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(2)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value >>= 2
         self.assertEqual(value, 2 >> 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value >>= two
         self.assertEqual(value, 2 >> 2 >> 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_iand(self):
-        value = wrapt.ObjectProxy(1)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(1)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value &= 2
         self.assertEqual(value, 1 & 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value &= two
         self.assertEqual(value, 1 & 2 & 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_ixor(self):
-        value = wrapt.ObjectProxy(1)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(1)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value ^= 2
         self.assertEqual(value, 1 ^ 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value ^= two
         self.assertEqual(value, 1 ^ 2 ^ 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_ior(self):
-        value = wrapt.ObjectProxy(1)
-        two = wrapt.ObjectProxy(2)
+        value = matrix_wrapt.ObjectProxy(1)
+        two = matrix_wrapt.ObjectProxy(2)
 
         value |= 2
         self.assertEqual(value, 1 | 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
         value |= two
         self.assertEqual(value, 1 | 2 | 2)
 
-        self.assertEqual(type(value), wrapt.ObjectProxy)
+        self.assertEqual(type(value), matrix_wrapt.ObjectProxy)
 
     def test_ior_list_self(self):
-        value = wrapt.ObjectProxy([])
+        value = matrix_wrapt.ObjectProxy([])
 
         try:
             value |= value
@@ -1433,32 +1433,32 @@ class TestAsNumberObjectProxy(unittest.TestCase):
             pass
 
     def test_neg(self):
-        value = wrapt.ObjectProxy(1)
+        value = matrix_wrapt.ObjectProxy(1)
 
         self.assertEqual(-value, -1)
 
     def test_pos(self):
-        value = wrapt.ObjectProxy(1)
+        value = matrix_wrapt.ObjectProxy(1)
 
         self.assertEqual(+value, 1)
 
     def test_abs(self):
-        value = wrapt.ObjectProxy(-1)
+        value = matrix_wrapt.ObjectProxy(-1)
 
         self.assertEqual(abs(value), 1)
 
     def test_invert(self):
-        value = wrapt.ObjectProxy(1)
+        value = matrix_wrapt.ObjectProxy(1)
 
         self.assertEqual(~value, ~1)
 
     def test_oct(self):
-        value = wrapt.ObjectProxy(20)
+        value = matrix_wrapt.ObjectProxy(20)
 
         self.assertEqual(oct(value), oct(20))
 
     def test_hex(self):
-        value = wrapt.ObjectProxy(20)
+        value = matrix_wrapt.ObjectProxy(20)
 
         self.assertEqual(hex(value), hex(20))
 
@@ -1466,7 +1466,7 @@ class TestAsNumberObjectProxy(unittest.TestCase):
         class Class(object):
             def __index__(self):
                 return 1
-        value = wrapt.ObjectProxy(Class())
+        value = matrix_wrapt.ObjectProxy(Class())
         items = [0, 1, 2]
 
         self.assertEqual(items[value], items[1])
@@ -1474,29 +1474,29 @@ class TestAsNumberObjectProxy(unittest.TestCase):
 class TestAsSequenceObjectProxy(unittest.TestCase):
 
     def test_length(self):
-        value = wrapt.ObjectProxy(list(range(3)))
+        value = matrix_wrapt.ObjectProxy(list(range(3)))
 
         self.assertEqual(len(value), 3)
 
     def test_contains(self):
-        value = wrapt.ObjectProxy(list(range(3)))
+        value = matrix_wrapt.ObjectProxy(list(range(3)))
 
         self.assertTrue(2 in value)
         self.assertFalse(-2 in value)
 
     def test_getitem(self):
-        value = wrapt.ObjectProxy(list(range(3)))
+        value = matrix_wrapt.ObjectProxy(list(range(3)))
 
         self.assertEqual(value[1], 1)
 
     def test_setitem(self):
-        value = wrapt.ObjectProxy(list(range(3)))
+        value = matrix_wrapt.ObjectProxy(list(range(3)))
         value[1] = -1
 
         self.assertEqual(value[1], -1)
 
     def test_delitem(self):
-        value = wrapt.ObjectProxy(list(range(3)))
+        value = matrix_wrapt.ObjectProxy(list(range(3)))
 
         self.assertEqual(len(value), 3)
 
@@ -1506,19 +1506,19 @@ class TestAsSequenceObjectProxy(unittest.TestCase):
         self.assertEqual(value[1], 2)
 
     def test_getslice(self):
-        value = wrapt.ObjectProxy(list(range(5)))
+        value = matrix_wrapt.ObjectProxy(list(range(5)))
 
         self.assertEqual(value[1:4], [1, 2, 3])
 
     def test_setslice(self):
-        value = wrapt.ObjectProxy(list(range(5)))
+        value = matrix_wrapt.ObjectProxy(list(range(5)))
 
         value[1:4] = reversed(value[1:4])
 
         self.assertEqual(value[1:4], [3, 2, 1])
 
     def test_delslice(self):
-        value = wrapt.ObjectProxy(list(range(5)))
+        value = matrix_wrapt.ObjectProxy(list(range(5)))
 
         del value[1:4]
 
@@ -1528,29 +1528,29 @@ class TestAsSequenceObjectProxy(unittest.TestCase):
 class TestAsMappingObjectProxy(unittest.TestCase):
 
     def test_length(self):
-        value = wrapt.ObjectProxy(dict.fromkeys(range(3), False))
+        value = matrix_wrapt.ObjectProxy(dict.fromkeys(range(3), False))
 
         self.assertEqual(len(value), 3)
 
     def test_contains(self):
-        value = wrapt.ObjectProxy(dict.fromkeys(range(3), False))
+        value = matrix_wrapt.ObjectProxy(dict.fromkeys(range(3), False))
 
         self.assertTrue(2 in value)
         self.assertFalse(-2 in value)
 
     def test_getitem(self):
-        value = wrapt.ObjectProxy(dict.fromkeys(range(3), False))
+        value = matrix_wrapt.ObjectProxy(dict.fromkeys(range(3), False))
 
         self.assertEqual(value[1], False)
 
     def test_setitem(self):
-        value = wrapt.ObjectProxy(dict.fromkeys(range(3), False))
+        value = matrix_wrapt.ObjectProxy(dict.fromkeys(range(3), False))
         value[1] = True
 
         self.assertEqual(value[1], True)
 
     def test_delitem(self):
-        value = wrapt.ObjectProxy(dict.fromkeys(range(3), False))
+        value = matrix_wrapt.ObjectProxy(dict.fromkeys(range(3), False))
 
         self.assertEqual(len(value), 3)
 
@@ -1561,25 +1561,25 @@ class TestAsMappingObjectProxy(unittest.TestCase):
 class TestObjectRepresentationObjectProxy(unittest.TestCase):
 
     def test_str(self):
-        value = wrapt.ObjectProxy(10)
+        value = matrix_wrapt.ObjectProxy(10)
 
         self.assertEqual(str(value), str(10))
 
-        value = wrapt.ObjectProxy((10,))
+        value = matrix_wrapt.ObjectProxy((10,))
 
         self.assertEqual(str(value), str((10,)))
 
-        value = wrapt.ObjectProxy([10])
+        value = matrix_wrapt.ObjectProxy([10])
 
         self.assertEqual(str(value), str([10]))
 
-        value = wrapt.ObjectProxy({10: 10})
+        value = matrix_wrapt.ObjectProxy({10: 10})
 
         self.assertEqual(str(value), str({10: 10}))
 
     def test_repr(self):
         number = 10
-        value = wrapt.ObjectProxy(number)
+        value = matrix_wrapt.ObjectProxy(number)
 
         self.assertNotEqual(repr(value).find('ObjectProxy at'), -1)
 
@@ -1587,7 +1587,7 @@ class TestDerivedClassCreation(unittest.TestCase):
 
     def test_derived_new(self):
 
-        class DerivedObjectProxy(wrapt.ObjectProxy):
+        class DerivedObjectProxy(matrix_wrapt.ObjectProxy):
 
             def __new__(cls, wrapped):
                 instance = super(DerivedObjectProxy, cls).__new__(cls)
@@ -1603,7 +1603,7 @@ class TestDerivedClassCreation(unittest.TestCase):
 
     def test_derived_setattr(self):
 
-        class DerivedObjectProxy(wrapt.ObjectProxy):
+        class DerivedObjectProxy(matrix_wrapt.ObjectProxy):
 
             def __init__(self, wrapped):
                 self._self_attribute = True
@@ -1616,7 +1616,7 @@ class TestDerivedClassCreation(unittest.TestCase):
 
     def test_derived_missing_init(self):
 
-        class DerivedObjectProxy(wrapt.ObjectProxy):
+        class DerivedObjectProxy(matrix_wrapt.ObjectProxy):
 
             def __init__(self, wrapped):
                 self.__wrapped__ = wrapped
@@ -1636,7 +1636,7 @@ class DerivedClassAttributes(unittest.TestCase):
         def function():
             pass
 
-        class DerivedObjectProxy(wrapt.ObjectProxy):
+        class DerivedObjectProxy(matrix_wrapt.ObjectProxy):
             pass
 
         obj = DerivedObjectProxy(function)
@@ -1657,7 +1657,7 @@ class DerivedClassAttributes(unittest.TestCase):
         def function():
             pass
 
-        class DerivedObjectProxy(wrapt.ObjectProxy):
+        class DerivedObjectProxy(matrix_wrapt.ObjectProxy):
             ATTRIBUTE = 1
 
         obj = DerivedObjectProxy(function)
@@ -1683,7 +1683,7 @@ class DerivedClassAttributes(unittest.TestCase):
         def function():
             pass
 
-        class DerivedObjectProxy(wrapt.ObjectProxy):
+        class DerivedObjectProxy(matrix_wrapt.ObjectProxy):
             def __init__(self, wrapped):
                 super(DerivedObjectProxy, self).__init__(wrapped)
                 self._self_attribute = 1
@@ -1732,7 +1732,7 @@ class OverrideAttributeAccess(unittest.TestCase):
         def function():
             pass
 
-        proxy = wrapt.ObjectProxy(function)
+        proxy = matrix_wrapt.ObjectProxy(function)
 
         self.assertTrue(hasattr(proxy, '__getattr__'))
         self.assertTrue(hasattr(proxy, '__setattr__'))
@@ -1745,7 +1745,7 @@ class OverrideAttributeAccess(unittest.TestCase):
 
         accessed = []
 
-        class DerivedObjectProxy(wrapt.ObjectProxy):
+        class DerivedObjectProxy(matrix_wrapt.ObjectProxy):
             def __getattr__(self, name):
                 accessed.append(name)
                 try:
@@ -1765,32 +1765,32 @@ class OverrideAttributeAccess(unittest.TestCase):
 class CallableFunction(unittest.TestCase):
 
     def test_proxy_hasattr_call(self):
-        proxy = wrapt.ObjectProxy(None)
+        proxy = matrix_wrapt.ObjectProxy(None)
 
         self.assertFalse(hasattr(proxy, '__call__'))
 
     def test_proxy_getattr_call(self):
-        proxy = wrapt.ObjectProxy(None)
+        proxy = matrix_wrapt.ObjectProxy(None)
 
         self.assertEqual(getattr(proxy, '__call__', None), None)
 
     def test_proxy_is_callable(self):
-        proxy = wrapt.ObjectProxy(None)
+        proxy = matrix_wrapt.ObjectProxy(None)
 
         self.assertFalse(callable(proxy))
 
     def test_callable_proxy_hasattr_call(self):
-        proxy = wrapt.CallableObjectProxy(None)
+        proxy = matrix_wrapt.CallableObjectProxy(None)
 
         self.assertTrue(hasattr(proxy, '__call__'))
 
     def test_callable_proxy_getattr_call(self):
-        proxy = wrapt.CallableObjectProxy(None)
+        proxy = matrix_wrapt.CallableObjectProxy(None)
 
         self.assertTrue(getattr(proxy, '__call__', None), None)
 
     def test_callable_proxy_is_callable(self):
-        proxy = wrapt.CallableObjectProxy(None)
+        proxy = matrix_wrapt.CallableObjectProxy(None)
 
         self.assertTrue(callable(proxy))
 
@@ -1803,28 +1803,28 @@ class SpecialMethods(unittest.TestCase):
                     return b'BYTES'
             instance = Class()
 
-            proxy = wrapt.ObjectProxy(instance)
+            proxy = matrix_wrapt.ObjectProxy(instance)
 
             self.assertEqual(bytes(instance), bytes(proxy))
 
     def test_str_format(self):
         instance = 'abcd'
 
-        proxy = wrapt.ObjectProxy(instance)
+        proxy = matrix_wrapt.ObjectProxy(instance)
 
         self.assertEqual(format(instance, ''), format(proxy, ''))
 
     def test_list_reversed(self):
         instance = [1, 2]
 
-        proxy = wrapt.ObjectProxy(instance)
+        proxy = matrix_wrapt.ObjectProxy(instance)
 
         self.assertEqual(list(reversed(instance)), list(reversed(proxy)))
 
     def test_complex(self):
         instance = 1.0+2j
 
-        proxy = wrapt.ObjectProxy(instance)
+        proxy = matrix_wrapt.ObjectProxy(instance)
 
         self.assertEqual(complex(instance), complex(proxy))
 
@@ -1833,7 +1833,7 @@ class SpecialMethods(unittest.TestCase):
 
         instance = decimal.Decimal(123)
 
-        proxy = wrapt.ObjectProxy(instance)
+        proxy = matrix_wrapt.ObjectProxy(instance)
 
         self.assertEqual(complex(instance), complex(proxy))
 
@@ -1842,7 +1842,7 @@ class SpecialMethods(unittest.TestCase):
 
         instance = fractions.Fraction('1/2')
 
-        proxy = wrapt.ObjectProxy(instance)
+        proxy = matrix_wrapt.ObjectProxy(instance)
 
         self.assertEqual(round(instance), round(proxy))
 
@@ -1852,7 +1852,7 @@ class TestArgumentUnpacking(unittest.TestCase):
         # A dict when given self as keyword argument uses it to create item in
         # the dict and no attempt is made to use a positional argument.
 
-        d = wrapt.wrappers.CallableObjectProxy(dict)(self='self')
+        d = matrix_wrapt.wrappers.CallableObjectProxy(dict)(self='self')
 
         self.assertEqual(d, dict(self='self'))
 
@@ -1867,7 +1867,7 @@ class TestArgumentUnpacking(unittest.TestCase):
         self.assertEqual(o._args, ('arg1',))
         self.assertEqual(o._kwargs, {})
 
-        o = wrapt.wrappers.CallableObjectProxy(Object)('arg1')
+        o = matrix_wrapt.wrappers.CallableObjectProxy(Object)('arg1')
 
         self.assertEqual(o._args, ('arg1',))
         self.assertEqual(o._kwargs, {})
@@ -1884,7 +1884,7 @@ class TestArgumentUnpacking(unittest.TestCase):
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
         with self.assertRaises(TypeError) as e:
-            wrapt.wrappers.CallableObjectProxy(Object)(self='self')
+            matrix_wrapt.wrappers.CallableObjectProxy(Object)(self='self')
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
@@ -1900,7 +1900,7 @@ class TestArgumentUnpacking(unittest.TestCase):
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
         with self.assertRaises(TypeError) as e:
-            wrapt.wrappers.CallableObjectProxy(Object)(arg1='arg1', self='self')
+            matrix_wrapt.wrappers.CallableObjectProxy(Object)(arg1='arg1', self='self')
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
@@ -1915,7 +1915,7 @@ class TestArgumentUnpacking(unittest.TestCase):
         self.assertEqual(o._args, ())
         self.assertEqual(o._kwargs, dict(self="self"))
 
-        o = wrapt.wrappers.CallableObjectProxy(Object)(self='self')
+        o = matrix_wrapt.wrappers.CallableObjectProxy(Object)(self='self')
 
         self.assertEqual(o._args, ())
         self.assertEqual(o._kwargs, dict(self="self"))
@@ -1933,7 +1933,7 @@ class TestArgumentUnpacking(unittest.TestCase):
         self.assertEqual(o._kwargs, {})
         self.assertEqual(o._self, 'self')
 
-        o = wrapt.wrappers.CallableObjectProxy(Object)(self='self')
+        o = matrix_wrapt.wrappers.CallableObjectProxy(Object)(self='self')
 
         self.assertEqual(o._args, ())
         self.assertEqual(o._kwargs, {})
@@ -1952,7 +1952,7 @@ class TestArgumentUnpacking(unittest.TestCase):
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument '_self'.*", str(e.exception)), None)
 
         with self.assertRaises(TypeError) as e:
-            wrapt.wrappers.CallableObjectProxy(Object)(_self='self')
+            matrix_wrapt.wrappers.CallableObjectProxy(Object)(_self='self')
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument '_self'.*", str(e.exception)), None)
 
@@ -1962,7 +1962,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
         # A dict when given self as keyword argument uses it to create item in
         # the dict and no attempt is made to use a positional argument.
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(dict, arg1='arg1')
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(dict, arg1='arg1')
 
         d = wrapper(self='self')
 
@@ -1972,7 +1972,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
         # A dict when given self as keyword argument uses it to create item in
         # the dict and no attempt is made to use a positional argument.
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(dict, self='self')
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(dict, self='self')
 
         d = wrapper(arg1='arg1')
 
@@ -1989,7 +1989,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
         self.assertEqual(o._args, ('arg1',))
         self.assertEqual(o._kwargs, {})
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object, 'arg1')
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object, 'arg1')
 
         o = wrapper()
 
@@ -2007,7 +2007,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
         self.assertEqual(o._args, ('arg1',))
         self.assertEqual(o._kwargs, {})
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object)
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object)
 
         o = wrapper('arg1')
 
@@ -2025,7 +2025,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object, self='self')
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object, self='self')
 
         with self.assertRaises(TypeError) as e:
             o = wrapper()
@@ -2043,7 +2043,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object)
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object)
 
         with self.assertRaises(TypeError) as e:
             o = wrapper(self='self')
@@ -2061,7 +2061,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object, arg1='arg1', self='self')
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object, arg1='arg1', self='self')
 
         with self.assertRaises(TypeError) as e:
             o = wrapper()
@@ -2079,7 +2079,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object)
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object)
 
         with self.assertRaises(TypeError) as e:
             o = wrapper(arg1='arg1', self='self')
@@ -2097,7 +2097,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
         self.assertEqual(o._args, ())
         self.assertEqual(o._kwargs, dict(self="self"))
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object, self='self')
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object, self='self')
 
         o = wrapper()
 
@@ -2115,7 +2115,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
         self.assertEqual(o._args, ())
         self.assertEqual(o._kwargs, dict(self="self"))
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object)
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object)
 
         o = wrapper(self='self')
 
@@ -2135,7 +2135,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
         self.assertEqual(o._kwargs, {})
         self.assertEqual(o._self, 'self')
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object, self='self')
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object, self='self')
 
         o = wrapper()
 
@@ -2156,7 +2156,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
         self.assertEqual(o._kwargs, {})
         self.assertEqual(o._self, 'self')
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object)
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object)
 
         o = wrapper(self='self')
 
@@ -2176,7 +2176,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument '_self'.*", str(e.exception)), None)
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object, _self='self')
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object, _self='self')
 
         with self.assertRaises(TypeError) as e:
             o = wrapper()
@@ -2195,7 +2195,7 @@ class TestArgumentUnpackingPartial(unittest.TestCase):
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument '_self'.*", str(e.exception)), None)
 
-        wrapper = wrapt.wrappers.PartialCallableObjectProxy(Object)
+        wrapper = matrix_wrapt.wrappers.PartialCallableObjectProxy(Object)
 
         with self.assertRaises(TypeError) as e:
             o = wrapper(_self='self')
@@ -2211,7 +2211,7 @@ class TestArgumentUnpackingWrapperBase(unittest.TestCase):
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
-        d = wrapt.wrappers.FunctionWrapper(dict, wrapper)(self='self')
+        d = matrix_wrapt.wrappers.FunctionWrapper(dict, wrapper)(self='self')
 
         self.assertEqual(d, dict(self='self'))
 
@@ -2229,7 +2229,7 @@ class TestArgumentUnpackingWrapperBase(unittest.TestCase):
         self.assertEqual(o._args, ('arg1',))
         self.assertEqual(o._kwargs, {})
 
-        o = wrapt.wrappers.FunctionWrapper(Object, wrapper)('arg1')
+        o = matrix_wrapt.wrappers.FunctionWrapper(Object, wrapper)('arg1')
 
         self.assertEqual(o._args, ('arg1',))
         self.assertEqual(o._kwargs, {})
@@ -2249,7 +2249,7 @@ class TestArgumentUnpackingWrapperBase(unittest.TestCase):
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
         with self.assertRaises(TypeError) as e:
-            wrapt.wrappers.FunctionWrapper(Object, wrapper)(self='self')
+            matrix_wrapt.wrappers.FunctionWrapper(Object, wrapper)(self='self')
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
@@ -2268,7 +2268,7 @@ class TestArgumentUnpackingWrapperBase(unittest.TestCase):
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
         with self.assertRaises(TypeError) as e:
-            wrapt.wrappers.FunctionWrapper(Object, wrapper)(arg1='arg1', self='self')
+            matrix_wrapt.wrappers.FunctionWrapper(Object, wrapper)(arg1='arg1', self='self')
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument 'self'.*", str(e.exception)), None)
 
@@ -2286,7 +2286,7 @@ class TestArgumentUnpackingWrapperBase(unittest.TestCase):
         self.assertEqual(o._args, ())
         self.assertEqual(o._kwargs, dict(self="self"))
 
-        o = wrapt.wrappers.FunctionWrapper(Object, wrapper)(self='self')
+        o = matrix_wrapt.wrappers.FunctionWrapper(Object, wrapper)(self='self')
 
         self.assertEqual(o._args, ())
         self.assertEqual(o._kwargs, dict(self="self"))
@@ -2307,7 +2307,7 @@ class TestArgumentUnpackingWrapperBase(unittest.TestCase):
         self.assertEqual(o._kwargs, {})
         self.assertEqual(o._self, 'self')
 
-        o = wrapt.wrappers.FunctionWrapper(Object, wrapper)(self='self')
+        o = matrix_wrapt.wrappers.FunctionWrapper(Object, wrapper)(self='self')
 
         self.assertEqual(o._args, ())
         self.assertEqual(o._kwargs, {})
@@ -2329,7 +2329,7 @@ class TestArgumentUnpackingWrapperBase(unittest.TestCase):
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument '_self'.*", str(e.exception)), None)
 
         with self.assertRaises(TypeError) as e:
-            wrapt.wrappers.FunctionWrapper(Object, wrapper)(_self='self')
+            matrix_wrapt.wrappers.FunctionWrapper(Object, wrapper)(_self='self')
 
         self.assertNotEqual(re.match(".*got multiple values for (keyword )?argument '_self'.*", str(e.exception)), None)
 
@@ -2344,7 +2344,7 @@ class TestArgumentUnpackingBoundFunctionWrapper(unittest.TestCase):
             def function(cls, self, *args, **kwargs):
                 return self, args, kwargs
 
-            function = wrapt.wrappers.FunctionWrapper(function, wrapper)
+            function = matrix_wrapt.wrappers.FunctionWrapper(function, wrapper)
 
         result = Object().function(self='self')
 
@@ -2358,7 +2358,7 @@ class TestArgumentUnpackingBoundFunctionWrapper(unittest.TestCase):
             def function(_self, self, *args, **kwargs):
                 return self, args, kwargs
 
-            function = wrapt.wrappers.FunctionWrapper(function, wrapper)
+            function = matrix_wrapt.wrappers.FunctionWrapper(function, wrapper)
 
         result = Object().function(self='self')
 
@@ -2367,7 +2367,7 @@ class TestArgumentUnpackingBoundFunctionWrapper(unittest.TestCase):
 class TestArgumentUnpackingDecorator(unittest.TestCase):
 
     def test_self_keyword_argument_on_function(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -2384,7 +2384,7 @@ class TestArgumentUnpackingDecorator(unittest.TestCase):
         self.assertEqual(result, ('self', (), {}))
 
     def test_self_keyword_argument_on_classmethod(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -2403,7 +2403,7 @@ class TestArgumentUnpackingDecorator(unittest.TestCase):
         self.assertEqual(result, ('self', (), dict(arg1='arg1')))
 
     def test_self_keyword_argument_on_instancemethod(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 

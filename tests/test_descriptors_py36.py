@@ -2,12 +2,12 @@ from __future__ import print_function
 
 import unittest
 
-import wrapt
+import matrix_wrapt
 
 class TestObjectDescriptors(unittest.TestCase):
 
     def test_set_name(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 

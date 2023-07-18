@@ -2,11 +2,11 @@ from __future__ import print_function
 
 import unittest
 
-import wrapt
+import matrix_wrapt
 
 from compat import PY2, PY3, exec_
 
-@wrapt.decorator
+@matrix_wrapt.decorator
 def passthru_decorator(wrapped, instance, args, kwargs):
     return wrapped(*args, **kwargs)
 
@@ -30,7 +30,7 @@ class TestUpdateAttributes(unittest.TestCase):
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
-        instance = wrapt.FunctionWrapper(function, wrapper)
+        instance = matrix_wrapt.FunctionWrapper(function, wrapper)
 
         self.assertEqual(instance.__name__, 'function')
 
@@ -61,7 +61,7 @@ class TestUpdateAttributes(unittest.TestCase):
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
-        instance = wrapt.FunctionWrapper(function, wrapper)
+        instance = matrix_wrapt.FunctionWrapper(function, wrapper)
 
         if PY3:
             method = self.test_update_qualname_modified_on_original
@@ -91,7 +91,7 @@ class TestUpdateAttributes(unittest.TestCase):
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
-        instance = wrapt.FunctionWrapper(function, wrapper)
+        instance = matrix_wrapt.FunctionWrapper(function, wrapper)
 
         self.assertEqual(instance.__module__, __name__)
 
@@ -120,7 +120,7 @@ class TestUpdateAttributes(unittest.TestCase):
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
-        instance = wrapt.FunctionWrapper(function, wrapper)
+        instance = matrix_wrapt.FunctionWrapper(function, wrapper)
 
         self.assertEqual(instance.__doc__, "documentation")
 
@@ -156,7 +156,7 @@ class TestUpdateAttributes(unittest.TestCase):
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
-        instance = wrapt.FunctionWrapper(function, wrapper)
+        instance = matrix_wrapt.FunctionWrapper(function, wrapper)
 
         if PY3:
             self.assertEqual(instance.__annotations__, {})

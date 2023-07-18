@@ -4,9 +4,9 @@ import unittest
 
 import copy
 
-import wrapt
+import matrix_wrapt
 
-class CustomObjectProxy(wrapt.ObjectProxy):
+class CustomObjectProxy(matrix_wrapt.ObjectProxy):
 
     def __copy__(self):
         return CustomObjectProxy(copy.copy(self.__wrapped__))
@@ -17,7 +17,7 @@ class CustomObjectProxy(wrapt.ObjectProxy):
 class TestObjectCopy(unittest.TestCase):
 
     def test_copy(self):
-        proxy1 = wrapt.ObjectProxy([1])
+        proxy1 = matrix_wrapt.ObjectProxy([1])
 
         with self.assertRaises(NotImplementedError) as context:
             proxy2 = copy.copy(proxy1)
@@ -26,7 +26,7 @@ class TestObjectCopy(unittest.TestCase):
                 'object proxy must define __copy__()')
 
     def test_deepcopy(self):
-        proxy1 = wrapt.ObjectProxy([1])
+        proxy1 = matrix_wrapt.ObjectProxy([1])
 
         with self.assertRaises(NotImplementedError) as context:
             proxy2 = copy.deepcopy(proxy1)

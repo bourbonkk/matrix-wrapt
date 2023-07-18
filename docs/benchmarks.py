@@ -1,4 +1,4 @@
-import wrapt  # https://pypi.python.org/pypi/wrapt
+import matrix_wrapt  # https://pypi.python.org/pypi/wrapt
 import decorator  # https://pypi.python.org/pypi/decorator
 
 def function1():
@@ -13,7 +13,7 @@ def wrapper2(func):
 def function2():
     pass
 
-@wrapt.decorator
+@matrix_wrapt.decorator
 def wrapper3(wrapped, instance, args, kwargs):
     return wrapped(*args, **kwargs)
 

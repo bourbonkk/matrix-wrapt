@@ -2,37 +2,37 @@ from __future__ import print_function
 
 import unittest
 
-import wrapt
+import matrix_wrapt
 
 from compat import PYXY
 
-@wrapt.synchronized
+@matrix_wrapt.synchronized
 def function():
     print('function')
 
 class C1(object):
 
-    @wrapt.synchronized
+    @matrix_wrapt.synchronized
     def function1(self):
         print('function1')
 
-    @wrapt.synchronized
+    @matrix_wrapt.synchronized
     @classmethod
     def function2(cls):
         print('function2')
 
-    @wrapt.synchronized
+    @matrix_wrapt.synchronized
     @staticmethod
     def function3():
         print('function3')
 
 c1 = C1()
 
-@wrapt.synchronized
+@matrix_wrapt.synchronized
 class C2(object):
     pass
 
-@wrapt.synchronized
+@matrix_wrapt.synchronized
 class C3:
     pass
 
@@ -47,12 +47,12 @@ class C4(object):
     # https://bugs.python.org/issue19072
 
     @classmethod
-    @wrapt.synchronized
+    @matrix_wrapt.synchronized
     def function2(cls):
         print('function2')
 
     @staticmethod
-    @wrapt.synchronized
+    @matrix_wrapt.synchronized
     def function3():
         print('function3')
 
@@ -64,7 +64,7 @@ class C5(object):
         return False
     __nonzero__=__bool__
 
-    @wrapt.synchronized
+    @matrix_wrapt.synchronized
     def function1(self):
         print('function1')
 

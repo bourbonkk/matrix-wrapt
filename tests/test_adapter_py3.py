@@ -6,7 +6,7 @@ import types
 
 from typing import Iterable
 
-import wrapt
+import matrix_wrapt
 
 from compat import PY2, exec_
 
@@ -109,7 +109,7 @@ class TestDynamicAdapterWithAnnotations(unittest.TestCase):
 
         argspec1 = inspect.getfullargspec(_adapter1)
 
-        @wrapt.decorator(adapter=argspec1)
+        @matrix_wrapt.decorator(adapter=argspec1)
         def _wrapper_1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -129,7 +129,7 @@ class TestDynamicAdapterWithAnnotations(unittest.TestCase):
 
         args = '(arg1, arg2, arg3=None, *args, **kwargs) -> int'
 
-        @wrapt.decorator(adapter=args)
+        @matrix_wrapt.decorator(adapter=args)
         def _wrapper_2(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -144,7 +144,7 @@ class TestDynamicAdapterWithAnnotations(unittest.TestCase):
 
         argspec1 = inspect.getfullargspec(_adapter1)
 
-        @wrapt.decorator(adapter=argspec1)
+        @matrix_wrapt.decorator(adapter=argspec1)
         def _wrapper_1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -167,7 +167,7 @@ class TestDynamicAdapterWithAnnotations(unittest.TestCase):
 
         args = '(self, arg1, arg2, arg3=None, *args, **kwargs) -> int'
 
-        @wrapt.decorator(adapter=args)
+        @matrix_wrapt.decorator(adapter=args)
         def _wrapper_2(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -186,7 +186,7 @@ class TestDynamicAdapterWithAnnotations(unittest.TestCase):
 
         argspec1 = inspect.getfullargspec(_adapter1)
 
-        @wrapt.decorator(adapter=argspec1)
+        @matrix_wrapt.decorator(adapter=argspec1)
         def _wrapper_1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -210,7 +210,7 @@ class TestDynamicAdapterWithAnnotations(unittest.TestCase):
 
         args = '(cls, arg1, arg2, arg3=None, *args, **kwargs) -> int'
 
-        @wrapt.decorator(adapter=args)
+        @matrix_wrapt.decorator(adapter=args)
         def _wrapper_2(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -231,7 +231,7 @@ class TestDynamicAdapterWithAnnotations(unittest.TestCase):
             argspec.args.insert(0, 'arg0')
             return argspec
 
-        @wrapt.decorator(adapter=wrapt.adapter_factory(factory))
+        @matrix_wrapt.decorator(adapter=matrix_wrapt.adapter_factory(factory))
         def _wrapper_1(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 

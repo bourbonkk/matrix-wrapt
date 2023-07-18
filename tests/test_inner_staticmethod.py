@@ -3,7 +3,7 @@ from __future__ import print_function
 import unittest
 import types
 
-import wrapt
+import matrix_wrapt
 
 from compat import exec_, getfullargspec
 
@@ -125,7 +125,7 @@ class TestCallingInnerStaticMethod(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertEqual(instance, None)
             self.assertEqual(args, _args)
@@ -152,7 +152,7 @@ class TestCallingInnerStaticMethod(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertEqual(instance, None)
             self.assertEqual(args, _args)
@@ -179,7 +179,7 @@ class TestCallingInnerStaticMethod(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertEqual(instance, None)
             self.assertEqual(args, _args)
@@ -207,7 +207,7 @@ class TestCallingInnerStaticMethod(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertEqual(instance, None)
             self.assertEqual(args, _args)
@@ -248,7 +248,7 @@ class TestCallingInnerStaticMethod(unittest.TestCase):
             def _function(*args, **kwargs):
                 return (args, kwargs)
 
-        wrapt.wrap_function_wrapper(Class, "_function", _decorator)
+        matrix_wrapt.wrap_function_wrapper(Class, "_function", _decorator)
 
         result = Class._function(*_args, **_kwargs)
 
@@ -273,7 +273,7 @@ class TestCallingInnerStaticMethod(unittest.TestCase):
             def _function(*args, **kwargs):
                 return (args, kwargs)
 
-        wrapt.wrap_function_wrapper(Class, "_function", _decorator)
+        matrix_wrapt.wrap_function_wrapper(Class, "_function", _decorator)
 
         result = Class()._function(*_args, **_kwargs)
 

@@ -5,12 +5,12 @@ import unittest
 import abc
 import _py_abc
 
-import wrapt
+import matrix_wrapt
 
 class TestClassInheritance(unittest.TestCase):
 
     def test_basic_inheritance(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -50,10 +50,10 @@ class TestClassInheritance(unittest.TestCase):
 
         def function():
             pass
-        class F(wrapt.FunctionWrapper):
+        class F(matrix_wrapt.FunctionWrapper):
             pass
         instance = F(function, wrapper)
-        self.assertTrue(isinstance(instance, wrapt.FunctionWrapper))
+        self.assertTrue(isinstance(instance, matrix_wrapt.FunctionWrapper))
 
     def test_abc_inheritance(self):
         # XXX The checks commented out below all fail because the
@@ -68,7 +68,7 @@ class TestClassInheritance(unittest.TestCase):
         #   >       return _abc_subclasscheck(cls, subclass)
         #   E       TypeError: issubclass() arg 1 must be a class
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 
@@ -125,7 +125,7 @@ class TestClassInheritance(unittest.TestCase):
         # are used, these all pass as have use the Python implementation
         # instead.
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def wrapper(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 

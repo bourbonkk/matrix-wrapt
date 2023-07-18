@@ -4,9 +4,9 @@ import unittest
 import threading
 import inspect
 
-import wrapt
+import matrix_wrapt
 
-@wrapt.decorator
+@matrix_wrapt.decorator
 def memoize(wrapped, instance, args, kwargs):
     if instance is None and inspect.isclass(wrapped):
         # Wrapped function is a class and we are creating an

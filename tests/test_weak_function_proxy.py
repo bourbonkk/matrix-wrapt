@@ -3,7 +3,7 @@ from __future__ import print_function
 import unittest
 import gc
 
-import wrapt
+import matrix_wrapt
 
 class TestWeakFunctionProxy(unittest.TestCase):
 
@@ -11,7 +11,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
         def function(a, b):
             return a, b
 
-        proxy = wrapt.WeakFunctionProxy(function)
+        proxy = matrix_wrapt.WeakFunctionProxy(function)
 
         self.assertTrue(isinstance(proxy, type(function)))
 
@@ -19,7 +19,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
         def function(a, b):
             return a, b
 
-        proxy = wrapt.WeakFunctionProxy(function)
+        proxy = matrix_wrapt.WeakFunctionProxy(function)
 
         self.assertEqual(proxy(1, 2), (1, 2))
 
@@ -30,7 +30,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
         def function(a, b):
             return a, b
 
-        proxy = wrapt.WeakFunctionProxy(function)
+        proxy = matrix_wrapt.WeakFunctionProxy(function)
 
         self.assertEqual(proxy(1, 2), (1, 2))
 
@@ -51,7 +51,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
         def callback(proxy):
             result.append(id(proxy))
 
-        proxy = wrapt.WeakFunctionProxy(function, callback)
+        proxy = matrix_wrapt.WeakFunctionProxy(function, callback)
 
         self.assertEqual(proxy(1, 2), (1, 2))
 
@@ -73,7 +73,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
 
         c = Class()
 
-        proxy = wrapt.WeakFunctionProxy(c.function, callback)
+        proxy = matrix_wrapt.WeakFunctionProxy(c.function, callback)
 
         self.assertEqual(proxy(1, 2), (1, 2))
 
@@ -95,7 +95,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
 
         c = Class()
 
-        proxy = wrapt.WeakFunctionProxy(c.function, callback)
+        proxy = matrix_wrapt.WeakFunctionProxy(c.function, callback)
 
         self.assertEqual(proxy(1, 2), (1, 2))
 
@@ -118,7 +118,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
 
         c = Class()
 
-        proxy = wrapt.WeakFunctionProxy(c.function, callback)
+        proxy = matrix_wrapt.WeakFunctionProxy(c.function, callback)
 
         self.assertEqual(proxy(1, 2), (1, 2))
 
@@ -141,7 +141,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
         def callback(proxy):
             result.append(id(proxy))
 
-        proxy = wrapt.WeakFunctionProxy(Class.function, callback)
+        proxy = matrix_wrapt.WeakFunctionProxy(Class.function, callback)
 
         self.assertEqual(proxy(1, 2), (1, 2))
 
@@ -162,7 +162,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
         def callback(proxy):
             result.append(id(proxy))
 
-        proxy = wrapt.WeakFunctionProxy(Class.function, callback)
+        proxy = matrix_wrapt.WeakFunctionProxy(Class.function, callback)
 
         self.assertEqual(proxy(1, 2), (1, 2))
 
@@ -173,7 +173,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
         self.assertEqual(id(proxy), result[0])
 
     def test_decorator_method(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def bark(wrapped, instance, args, kwargs):
             return 'bark'
 
@@ -186,7 +186,7 @@ class TestWeakFunctionProxy(unittest.TestCase):
 
         self.assertEqual(animal.squeal(), 'bark')
 
-        method = wrapt.WeakFunctionProxy(animal.squeal)
+        method = matrix_wrapt.WeakFunctionProxy(animal.squeal)
 
         self.assertEqual(method(), 'bark')
 
@@ -196,7 +196,7 @@ class TestArgumentUnpackingWeakFunctionProxy(unittest.TestCase):
         def function(self, *args, **kwargs):
             return self, args, kwargs
 
-        proxy = wrapt.wrappers.WeakFunctionProxy(function)
+        proxy = matrix_wrapt.wrappers.WeakFunctionProxy(function)
 
         self.assertEqual(proxy(self='self', arg1='arg1'), ('self', (), dict(arg1='arg1')))
 

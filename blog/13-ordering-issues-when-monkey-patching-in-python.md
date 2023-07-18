@@ -98,14 +98,17 @@ patched was imported, and then execute it.
 ```python
 import sys
 
-from wrapt import register_post_import_hook
+from matrix_wrapt import register_post_import_hook
+
 
 def load_and_execute(name):
     def _load_and_execute(target_module):
         __import__(name)
         patch_module = sys.modules[name]
         getattr(patch_module, 'apply_patch')(target_module)
+
     return _load_and_execute
+
 
 register_post_import_hook(load_and_execute('patch_tempfile'), 'tempfile')
 ```
@@ -113,14 +116,18 @@ register_post_import_hook(load_and_execute('patch_tempfile'), 'tempfile')
 In the module file `patch_tempfile.py` we would now have:
 
 ```python
-from wrapt import wrap_function_wrapper
+from matrix_wrapt import wrap_function_wrapper
+
 
 def _mkdtemp_wrapper(wrapped, instance, args, kwargs):
-    print 'calling', wrapped.__name__
+    print
+    'calling', wrapped.__name__
     return wrapped(*args, **kwargs)
 
+
 def apply_patch(module):
-    print 'patching', module.__name__
+    print
+    'patching', module.__name__
     wrap_function_wrapper(module, 'mkdtemp', _mkdtemp_wrapper)
 ```
 
@@ -235,14 +242,18 @@ Finally, the monkey patches will actually be contained in
 'src/tempfile_debugging.py' and for now is much like what we had before.
 
 ```python
-from wrapt import wrap_function_wrapper
+from matrix_wrapt import wrap_function_wrapper
+
 
 def _mkdtemp_wrapper(wrapped, instance, args, kwargs):
-    print 'calling', wrapped.__name__
+    print
+    'calling', wrapped.__name__
     return wrapped(*args, **kwargs)
 
+
 def patch_tempfile(module):
-    print 'patching', module.__name__
+    print
+    'patching', module.__name__
     wrap_function_wrapper(module, 'mkdtemp', _mkdtemp_wrapper)
 ```
 
@@ -256,7 +267,7 @@ add:
 ```python
 import os
 
-from wrapt import discover_post_import_hooks
+from matrix_wrapt import discover_post_import_hooks
 
 patches = os.environ.get('WRAPT_PATCHES')
 
@@ -264,7 +275,8 @@ if patches:
     for name in patches.split(','):
         name = name.strip()
         if name:
-            print 'discover', name
+            print
+            'discover', name
             discover_post_import_hooks(name)
 ```
 

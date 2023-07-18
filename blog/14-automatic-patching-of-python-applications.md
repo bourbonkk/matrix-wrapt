@@ -109,7 +109,7 @@ any Python application script file was:
 ```python
 import os
 
-from wrapt import discover_post_import_hooks
+from matrix_wrapt import discover_post_import_hooks
 
 patches = os.environ.get('WRAPT_PATCHES')
 
@@ -117,7 +117,8 @@ if patches:
     for name in patches.split(','):
         name = name.strip()
         if name:
-            print 'discover', name
+            print
+            'discover', name
             discover_post_import_hooks(name)
 ```
 
@@ -252,13 +253,14 @@ Finally we now have our `_register_bootstrap_functions()` defined as:
 ```python
 _registered = False
 
+
 def _register_bootstrap_functions():
     global _registered
     if _registered:
         return
     _registered = True
 
-    from wrapt import discover_post_import_hooks
+    from matrix_wrapt import discover_post_import_hooks
     for name in os.environ.get('AUTOWRAPT_BOOTSTRAP', '').split(','):
         discover_post_import_hooks(name)
 ```

@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import unittest
 
-import wrapt
+import matrix_wrapt
 
 class TestPartialCallableObjectProxy(unittest.TestCase):
 
@@ -10,7 +10,7 @@ class TestPartialCallableObjectProxy(unittest.TestCase):
         def func0():
             return ((), {})
 
-        partial0 = wrapt.PartialCallableObjectProxy(func0)
+        partial0 = matrix_wrapt.PartialCallableObjectProxy(func0)
 
         args, kwargs = (), {}
 
@@ -22,7 +22,7 @@ class TestPartialCallableObjectProxy(unittest.TestCase):
 
         args, kwargs = (), {}
 
-        partial0 = wrapt.PartialCallableObjectProxy(func0, *args, **kwargs)
+        partial0 = matrix_wrapt.PartialCallableObjectProxy(func0, *args, **kwargs)
 
         self.assertEqual(partial0(), (args, kwargs))
 
@@ -32,7 +32,7 @@ class TestPartialCallableObjectProxy(unittest.TestCase):
 
         args, kwargs = (1,), {}
 
-        partial0 = wrapt.PartialCallableObjectProxy(func0, *args)
+        partial0 = matrix_wrapt.PartialCallableObjectProxy(func0, *args)
 
         self.assertEqual(partial0(), (args, kwargs))
 
@@ -42,7 +42,7 @@ class TestPartialCallableObjectProxy(unittest.TestCase):
 
         args, kwargs = (), {'k1': 1}
 
-        partial0 = wrapt.PartialCallableObjectProxy(func0, **kwargs)
+        partial0 = matrix_wrapt.PartialCallableObjectProxy(func0, **kwargs)
 
         self.assertEqual(partial0(), (args, kwargs))
 
@@ -52,7 +52,7 @@ class TestPartialCallableObjectProxy(unittest.TestCase):
 
         args, kwargs = (1, 2, 3), {}
 
-        partial0 = wrapt.PartialCallableObjectProxy(func0, *args)
+        partial0 = matrix_wrapt.PartialCallableObjectProxy(func0, *args)
 
         self.assertEqual(partial0(), (args, kwargs))
 
@@ -62,7 +62,7 @@ class TestPartialCallableObjectProxy(unittest.TestCase):
 
         args, kwargs = (), {'k1': 1, 'k2': 2, 'k3': 3}
 
-        partial0 = wrapt.PartialCallableObjectProxy(func0, **kwargs)
+        partial0 = matrix_wrapt.PartialCallableObjectProxy(func0, **kwargs)
 
         self.assertEqual(partial0(), (args, kwargs))
 

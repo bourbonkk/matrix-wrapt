@@ -4,7 +4,7 @@ import unittest
 import inspect
 import types
 
-import wrapt
+import matrix_wrapt
 
 from compat import exec_, getfullargspec
 
@@ -230,7 +230,7 @@ class TestCallingInstanceMethodOldStyle(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertNotEqual(instance, None)
             self.assertEqual(args, _args)
@@ -258,7 +258,7 @@ class TestCallingInstanceMethodOldStyle(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertNotEqual(instance, None)
             self.assertEqual(args, _args)
@@ -287,7 +287,7 @@ class TestCallingInstanceMethodOldStyle(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertNotEqual(instance, None)
             self.assertEqual(args, _args)
@@ -316,7 +316,7 @@ class TestCallingInstanceMethodOldStyle(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertNotEqual(instance, None)
             self.assertEqual(args, _args)
@@ -348,7 +348,7 @@ class TestCallingInstanceMethodNewStyle(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertNotEqual(instance, None)
             self.assertEqual(args, _args)
@@ -376,7 +376,7 @@ class TestCallingInstanceMethodNewStyle(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertNotEqual(instance, None)
             self.assertEqual(args, _args)
@@ -405,7 +405,7 @@ class TestCallingInstanceMethodNewStyle(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertNotEqual(instance, None)
             self.assertEqual(args, _args)
@@ -434,7 +434,7 @@ class TestCallingInstanceMethodNewStyle(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             self.assertNotEqual(instance, None)
             self.assertEqual(args, _args)

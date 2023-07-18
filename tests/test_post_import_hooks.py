@@ -4,8 +4,8 @@ import unittest
 import sys
 import threading
 
-import wrapt
-from wrapt.importer import _post_import_hooks
+import matrix_wrapt
+from matrix_wrapt.importer import _post_import_hooks
 
 from compat import PY2, PY3
 
@@ -24,7 +24,7 @@ class TestPostImportHooks(unittest.TestCase):
     def test_before_import(self):
         invoked = []
 
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this(module):
             self.assertEqual(module.__name__, 'this')
             invoked.append(1)
@@ -42,7 +42,7 @@ class TestPostImportHooks(unittest.TestCase):
 
         self.assertEqual(len(invoked), 0)
 
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this(module):
             self.assertEqual(module.__name__, 'this')
             invoked.append(1)
@@ -53,7 +53,7 @@ class TestPostImportHooks(unittest.TestCase):
         invoked_one = []
         invoked_two = []
 
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this_one(module):
             self.assertEqual(module.__name__, 'this')
             invoked_one.append(1)
@@ -66,7 +66,7 @@ class TestPostImportHooks(unittest.TestCase):
         self.assertEqual(len(invoked_one), 1)
         self.assertEqual(len(invoked_two), 0)
 
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this_two(module):
             self.assertEqual(module.__name__, 'this')
             invoked_two.append(1)
@@ -77,7 +77,7 @@ class TestPostImportHooks(unittest.TestCase):
     def test_remove_from_sys_modules(self):
         invoked = []
 
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this(module):
             self.assertEqual(module.__name__, 'this')
             invoked.append(1)
@@ -86,7 +86,7 @@ class TestPostImportHooks(unittest.TestCase):
         self.assertEqual(len(invoked), 1)
 
         del sys.modules['this']
-        wrapt.register_post_import_hook(hook_this, 'this')
+        matrix_wrapt.register_post_import_hook(hook_this, 'this')
         import this
 
         self.assertEqual(len(invoked), 2)
@@ -99,10 +99,10 @@ class TestPostImportHooks(unittest.TestCase):
 
         import this
 
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this(module):
             def worker():
-                @wrapt.when_imported('xxx')
+                @matrix_wrapt.when_imported('xxx')
                 def hook_xxx(module):
                     pass
 
@@ -120,10 +120,10 @@ class TestPostImportHooks(unittest.TestCase):
         # been imported, creates a thread which in turn attempts to register
         # another import hook.
 
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this(module):
             def worker():
-                @wrapt.when_imported('xxx')
+                @matrix_wrapt.when_imported('xxx')
                 def hook_xxx(module):
                     pass
 
@@ -153,13 +153,13 @@ class TestPostImportHooks(unittest.TestCase):
 
         hooks_called = []
 
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this(module):
             hooks_called.append('this')
 
             self.assertFalse('wsgiref' in sys.modules)
     
-            @wrapt.when_imported('wsgiref')
+            @matrix_wrapt.when_imported('wsgiref')
             def hook_wsgiref(module):
                 hooks_called.append('wsgiref')
 
@@ -178,7 +178,7 @@ class TestPostImportHooks(unittest.TestCase):
         self.assertEqual(hooks_called, ['this', 'wsgiref'])
 
     def test_loader(self):
-        @wrapt.when_imported('this')
+        @matrix_wrapt.when_imported('this')
         def hook_this(module):
             pass
 

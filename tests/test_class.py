@@ -4,7 +4,7 @@ import unittest
 import inspect
 import types
 
-import wrapt
+import matrix_wrapt
 
 from compat import PY2, PY3, exec_
 
@@ -35,7 +35,7 @@ class TestIntrospection(unittest.TestCase):
 class TestInheritance(unittest.TestCase):
 
     def test_single_inheritance(self):
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def passthru(wrapped, instance, args, kwargs):
             return wrapped(*args, **kwargs)
 

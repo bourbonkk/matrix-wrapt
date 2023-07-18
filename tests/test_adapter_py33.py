@@ -4,7 +4,7 @@ import unittest
 import inspect
 import types
 
-import wrapt
+import matrix_wrapt
 
 from compat import PY2, PY3, exec_
 

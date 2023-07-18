@@ -50,16 +50,20 @@ With what I have presented so far of the wrapt package, an equivalent way
 of doing this would be:
 
 ```python
-from wrapt import patch_function_wrapper
+from matrix_wrapt import patch_function_wrapper
+
 
 class ProductionClass(object):
     def method(self, a, b, c, key):
-        print a, b, c, key
+        print
+        a, b, c, key
+
 
 @patch_function_wrapper(__name__, 'ProductionClass.method')
 def wrapper(wrapped, instance, args, kwargs):
     assert args == (3, 4, 5) and kwargs.get('key') == 'value'
     return 3
+
 
 def test_method():
     real = ProductionClass()
@@ -80,16 +84,20 @@ function that will only be applied for the scope of a specific call that
 the decorated function is applied to. We can therefore write the above as:
 
 ```python
-from wrapt import transient_function_wrapper
+from matrix_wrapt import transient_function_wrapper
+
 
 class ProductionClass(object):
     def method(self, a, b, c, key):
-        print a, b, c, key
+        print
+        a, b, c, key
+
 
 @transient_function_wrapper(__name__, 'ProductionClass.method')
 def apply_ProductionClass_method_wrapper(wrapped, instance, args, kwargs):
     assert args == (3, 4, 5) and kwargs.get('key') == 'value'
     return 3
+
 
 @apply_ProductionClass_method_wrapper
 def test_method():
@@ -145,16 +153,20 @@ wrapt wrapper function is called, it is always passed the original function
 which was wrapped, so no magic is needed to stash that away.
 
 ```python
-from wrapt import transient_function_wrapper
+from matrix_wrapt import transient_function_wrapper
+
 
 class ProductionClass(object):
     def method(self, a, b, c, key):
-        print a, b, c, key
+        print
+        a, b, c, key
+
 
 @transient_function_wrapper(__name__, 'ProductionClass.method')
 def apply_ProductionClass_method_wrapper(wrapped, instance, args, kwargs):
     assert args == (3, 4, 5) and kwargs.get('key') == 'value'
     return wrapped(*args, **kwargs)
+
 
 @apply_ProductionClass_method_wrapper
 def test_method():
@@ -216,22 +228,27 @@ def test_method(mock_method):
 And with wrapt I would instead do:
 
 ```python
-from wrapt import transient_function_wrapper, function_wrapper
+from matrix_wrapt import transient_function_wrapper, function_wrapper
+
 
 def function():
     pass
+
 
 class ProductionClass(object):
     def method(self, a, b, c, key):
         return function
 
+
 @function_wrapper
 def result_function_wrapper(wrapped, instance, args, kwargs):
     return wrapped(*args, **kwargs)
 
+
 @transient_function_wrapper(__name__, 'ProductionClass.method')
 def apply_ProductionClass_method_wrapper(wrapped, instance, args, kwargs):
     return result_function_wrapper(wrapped(*args, **kwargs))
+
 
 @apply_ProductionClass_method_wrapper
 def test_method():
@@ -267,27 +284,33 @@ The first approach is to replace the method on the instance directly with a
 wrapper which encapsulates the original method.
 
 ```python
-from wrapt import transient_function_wrapper, function_wrapper
+from matrix_wrapt import transient_function_wrapper, function_wrapper
+
 
 class StorageClass(object):
     def run(self):
         pass
 
+
 storage = StorageClass()
+
 
 class ProductionClass(object):
     def method(self, a, b, c, key):
         return storage
 
+
 @function_wrapper
 def run_method_wrapper(wrapped, instance, args, kwargs):
     return wrapped(*args, **kwargs)
+
 
 @transient_function_wrapper(__name__, 'ProductionClass.method')
 def apply_ProductionClass_method_wrapper(wrapped, instance, args, kwargs):
     storage = wrapped(*args, **kwargs)
     storage.run = run_method_wrapper(storage.run)
     return storage
+
 
 @apply_ProductionClass_method_wrapper
 def test_method():
@@ -324,26 +347,32 @@ We can therefore avoid needing to change the original object itself.
 For this example what we can therefore do is:
 
 ```python
-from wrapt import transient_function_wrapper, ObjectProxy
+from matrix_wrapt import transient_function_wrapper, ObjectProxy
+
 
 class StorageClass(object):
     def run(self):
         pass
 
+
 storage = StorageClass()
+
 
 class ProductionClass(object):
     def method(self, a, b, c, key):
         return storage
 
+
 class StorageClassProxy(ObjectProxy):
     def run(self):
         return self.__wrapped__.run()
+
 
 @transient_function_wrapper(__name__, 'ProductionClass.method')
 def apply_ProductionClass_method_wrapper(wrapped, instance, args, kwargs):
     storage = wrapped(*args, **kwargs)
     return StorageClassProxy(storage)
+
 
 @apply_ProductionClass_method_wrapper
 def test_method():
@@ -361,27 +390,33 @@ With the proxy we can even intercept access to an attribute of the original
 object by adding a property to the proxy object.
 
 ```python
-from wrapt import transient_function_wrapper, ObjectProxy
+from matrix_wrapt import transient_function_wrapper, ObjectProxy
+
 
 class StorageClass(object):
     def __init__(self):
         self.name = 'name'
 
+
 storage = StorageClass()
+
 
 class ProductionClass(object):
     def method(self, a, b, c, key):
         return storage
+
 
 class StorageClassProxy(ObjectProxy):
     @property
     def name(self):
         return self.__wrapped__.name
 
+
 @transient_function_wrapper(__name__, 'ProductionClass.method')
 def apply_ProductionClass_method_wrapper(wrapped, instance, args, kwargs):
     storage = wrapped(*args, **kwargs)
     return StorageClassProxy(storage)
+
 
 @apply_ProductionClass_method_wrapper
 def test_method():
@@ -414,11 +449,13 @@ ways this might be done if you are partial to the way that Mock does
 things.
 
 ```python
-from wrapt import transient_function_wrapper
+from matrix_wrapt import transient_function_wrapper
+
 
 class ProductionClass(object):
     def method(self, a, b, c, key):
         pass
+
 
 def patch(module, name):
     def _decorator(wrapped):
@@ -428,12 +465,17 @@ def patch(module, name):
                 self.args = args
                 self.kwargs = kwargs
                 return wrapped(*args, **kwargs)
+
         wrapper = Wrapper()
+
         @wrapper
         def _wrapper():
             return wrapped(wrapper)
+
         return _wrapper
+
     return _decorator
+
 
 @patch(__name__, 'ProductionClass.method')
 def test_method(mock_method):

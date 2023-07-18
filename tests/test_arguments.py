@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import unittest
 
-import wrapt
+import matrix_wrapt
 
 class TestArguments(unittest.TestCase):
 
@@ -12,13 +12,13 @@ class TestArguments(unittest.TestCase):
 
         expected = {'a': 10, 'c': 3, 'b': 20, 'e': 5, 'd': 40,
                 'args': (), 'kwargs': {'f': 50}}
-        calculated = wrapt.getcallargs(function, 10, 20, d=40, f=50)
+        calculated = matrix_wrapt.getcallargs(function, 10, 20, d=40, f=50)
 
         self.assertEqual(expected, calculated)
 
         expected = {'a': 10, 'c': 30, 'b': 20, 'e': 50, 'd': 40,
                 'args': (60,), 'kwargs': {}}
-        calculated = wrapt.getcallargs(function, 10, 20, 30, 40, 50, 60)
+        calculated = matrix_wrapt.getcallargs(function, 10, 20, 30, 40, 50, 60)
 
         self.assertEqual(expected, calculated)
 
@@ -27,4 +27,4 @@ class TestArguments(unittest.TestCase):
             pass
 
         kwargs = { u'b': 40 }
-        self.assertRaises(TypeError, wrapt.getcallargs, function, **kwargs)
+        self.assertRaises(TypeError, matrix_wrapt.getcallargs, function, **kwargs)

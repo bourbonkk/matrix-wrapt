@@ -3,7 +3,7 @@ from __future__ import print_function
 import unittest
 import types
 
-import wrapt
+import matrix_wrapt
 
 from compat import PYXY, exec_, getfullargspec
 
@@ -132,7 +132,7 @@ class TestCallingOuterClassMethod(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             if PYXY < (3, 9):
                 self.assertEqual(instance, None)
@@ -174,7 +174,7 @@ class TestCallingOuterClassMethod(unittest.TestCase):
         _args = (1, 2)
         _kwargs = {'one': 1, 'two': 2}
 
-        @wrapt.decorator
+        @matrix_wrapt.decorator
         def _decorator(wrapped, instance, args, kwargs):
             if PYXY < (3, 9):
                 self.assertEqual(instance, None)

@@ -53,10 +53,11 @@ recap how the wrapt package could be used to create a decorator. The
 primary pattern for this was:
 
 ```python
-import wrapt
+import matrix_wrapt
 import inspect
 
-@wrapt.decorator
+
+@matrix_wrapt.decorator
 def universal(wrapped, instance, args, kwargs):
     if instance is None:
         if inspect.isclass(wrapped):
@@ -199,9 +200,10 @@ class Example(object):
     def name(self):
         return 'name'
 
-import wrapt
 
-wrapt.wrap_function_wrapper(Example, 'name', wrapper)
+import matrix_wrapt
+
+matrix_wrapt.wrap_function_wrapper(Example, 'name', wrapper)
 ```
 
 In this case we had the class in the same code file, but we could also have
@@ -210,9 +212,9 @@ done:
 ```python
 import example
 
-import wrapt
+import matrix_wrapt
 
-wrapt.wrap_function_wrapper(example, 'Example.name', wrapper)
+matrix_wrapt.wrap_function_wrapper(example, 'Example.name', wrapper)
 ```
 
 That is, we provide the first argument as the module the target is defined
@@ -223,18 +225,19 @@ We could also skip importing the module altogether and just used the name
 of the module.
 
 ```python
-import wrapt
+import matrix_wrapt
 
-wrapt.wrap_function_wrapper('example', 'Example.name', wrapper)
+matrix_wrapt.wrap_function_wrapper('example', 'Example.name', wrapper)
 ```
 
 Just to prove that just about anything can be simplified by the user of a
 decorator, we finally could write the whole thing as:
 
 ```python
-import wrapt
+import matrix_wrapt
 
-@wrapt.patch_function_wrapper('example', 'Example.name')
+
+@matrix_wrapt.patch_function_wrapper('example', 'Example.name')
 def wrapper(wrapped, instance, args, kwargs):
     return wrapped(*args, **kwargs)
 ```
@@ -267,9 +270,10 @@ from example import function
 If you come along later and have:
 
 ```python
-import wrapt
+import matrix_wrapt
 
-@wrapt.patch_function_wrapper('example', 'function')
+
+@matrix_wrapt.patch_function_wrapper('example', 'function')
 def wrapper(wrapped, instance, args, kwargs):
     return wrapped(*args, **kwargs)
 ```
