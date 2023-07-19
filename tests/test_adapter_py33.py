@@ -12,7 +12,7 @@ DECORATORS_CODE = """
 import matrix_wrapt
 
 def prototype(arg1, arg2, *, arg3=None, **kwargs): pass
-@wrapt.decorator(adapter=prototype)
+@matrix_wrapt.decorator(adapter=prototype)
 def adapter1(wrapped, instance, args, kwargs):
     '''adapter documentation'''
     return wrapped(*args, **kwargs)

@@ -10,7 +10,7 @@ from compat import exec_, getfullargspec
 DECORATORS_CODE = """
 import matrix_wrapt
 
-@wrapt.decorator
+@matrix_wrapt.decorator
 def passthru_decorator(wrapped, instance, args, kwargs):
     return wrapped(*args, **kwargs)
 """

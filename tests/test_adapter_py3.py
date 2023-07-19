@@ -15,13 +15,13 @@ import matrix_wrapt
 from typing import Iterable
 
 def prototype1(arg1, arg2, arg3=None, *args, **kwargs) -> Iterable: pass
-@wrapt.decorator(adapter=prototype1)
+@matrix_wrapt.decorator(adapter=prototype1)
 def adapter1(wrapped, instance, args, kwargs):
     '''adapter documentation'''
     return wrapped(*args, **kwargs)
 
 def prototype2(arg1, arg2, arg3=None, *args, **kwargs) -> int: pass
-@wrapt.decorator(adapter=prototype2)
+@matrix_wrapt.decorator(adapter=prototype2)
 def adapter2(wrapped, instance, args, kwargs):
     '''adapter documentation'''
     return wrapped(*args, **kwargs)
