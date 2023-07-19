@@ -9,7 +9,7 @@ import matrix_wrapt
 from compat import PY2, PY3, exec_
 
 DECORATORS_CODE = """
-import wrapt
+import matrix_wrapt
 
 def prototype(arg1, arg2, *, arg3=None, **kwargs): pass
 @wrapt.decorator(adapter=prototype)

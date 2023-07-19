@@ -9,7 +9,7 @@ import matrix_wrapt
 from compat import PY2, PY3, exec_
 
 DECORATORS_CODE = """
-import wrapt
+import matrix_wrapt
 
 @wrapt.decorator
 def passthru_decorator(wrapped, instance, args, kwargs):

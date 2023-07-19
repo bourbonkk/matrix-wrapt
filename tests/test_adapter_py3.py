@@ -11,7 +11,7 @@ import matrix_wrapt
 from compat import PY2, exec_
 
 DECORATORS_CODE = """
-import wrapt
+import matrix_wrapt
 from typing import Iterable
 
 def prototype1(arg1, arg2, arg3=None, *args, **kwargs) -> Iterable: pass
