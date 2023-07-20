@@ -29,7 +29,7 @@ if platform.python_implementation() != "CPython":
 
 extensions = [
     setuptools.Extension(
-        "wrapt._wrappers",
+        "matrix_wrapt._wrappers",
         sources=["src/matrix_wrapt/_wrappers.c"],
         optional=not force_extensions,
     )
